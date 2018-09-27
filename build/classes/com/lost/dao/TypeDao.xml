@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lost.dao.TypeDao">
+	<insert id="addType" parameterType="string">
+		insert into type (typeName) values (#{typeName})
+	</insert>
+	<select id="queryAllType" resultType="com.lost.javabean.pojo.Type">
+		select * from type
+	</select>
+	<delete id="deleteType" parameterType="Integer">
+		delete from type where typeId=#{typeId}
+	</delete>
+	<select id="queryTypeByLostId" parameterType="Integer" resultType="com.lost.javabean.pojo.Type">
+		select t.* from type as t,losttype as lt where lt.lId=#{lostId} and lt.tId=t.typeId 
+	</select>
+</mapper>
+
+

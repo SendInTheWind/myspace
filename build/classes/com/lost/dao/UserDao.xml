@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lost.dao.UserDao">
+	<insert id="addUser" parameterType="com.lost.javabean.pojo.User">
+		insert into user (userPhone,userPassword,userEmail,userName,userHead,userGrade,userGender) 
+		values(#{userPhone},#{userPassword},#{userEmail},#{userName},#{userHead},#{userGrade},#{userGender})
+	
+	</insert>
+	<update id="updateUser" parameterType="com.lost.javabean.pojo.User">
+		update user
+		<set>
+			<if test="userPhone!=null and userPhone!=''">
+				userphone=#{userPhone},
+			</if>
+			<if test="userPassword!=null and userPassword!=''">
+				userPassword=#{userPassword},
+			</if>
+			<if test="userEmail!=null and userEmail!=''">
+				userEmail=#{userEmail},
+			</if>
+			<if test="userName!=null and userName!=''">
+				userName=#{userName},
+			</if>
+			<if test="userHead!=null and userHead!=''">
+				userHead=#{userHead},
+			</if>
+			<if test="userGender!=null and userGender!=''">
+				userGender=#{userGender},
+			</if>
+		</set>
+		<where>
+			<if test="userId!=null and userId!=''">
+				userId=#{userId}
+			</if>
+		</where>
+	</update>
+	<select id="queryUser" parameterType="com.lost.javabean.pojo.User" resultType="com.lost.javabean.pojo.User">
+		select * from user where userPhone=#{userPhone} and userPassword=#{userPassword}
+	</select>
+	<select id="queryUserByUserPhone" parameterType="String" resultType="Integer">
+		select count(*) from user where userPhone=#{userPhone}
+	</select>
+</mapper>
+
+
