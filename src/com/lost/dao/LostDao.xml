@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lost.dao.LostDao">
+	<!-- 添加lost -->
+	<insert id="addLost" parameterType="com.lost.javabean.pojo.Lost" useGeneratedKeys="true" keyProperty="listId">
+		insert into  lost (lostHead,lostTime,lostSite,lostDescribe,lostJudge) values (#{lostHead},#{lostTime},#{lostSite},#{lostDescribe},#{lostJudge})
+	</insert>
+	<!-- 添加userLost -->
+	<insert id="addUserLost" >
+		insert into userlost (uId,lId) values(#{uId},#{lId})
+	</insert>
+	
+	<insert id="addLostType"  >
+		insert into losttype (lId,tId) values 
+		<foreach collection="lostTypeList" item="type" separator="," >
+			<if test="type.typeId!=null and type.typeId!=''">
+				(#{lId},#{type.typeId})
+			</if>
+		</foreach>
+	</insert>
+	
+	<delete id="deleteUserLost" parameterType="Integer">
+		delete from userlost where lId=#{lostId}
+	</delete>
+	<delete id="deleteLostType" parameterType="Integer">
+		delete from losttype where lId=#{lostId}
+	</delete>
+	<delete id="deleteLostById" parameterType="Integer">
+		delete from lost where lostId=#{lostId}
+	</delete>
+	
+	
+	
+	
+	<update id="updateLost" parameterType="com.lost.javabean.pojo.Lost">
+		update lost 
+		<set>
+			<if test="lostHead!=null and lostHead!=''">
+			 lostHead=#{lostHead},
+			</if>
+			<if test="lostTime!=null and lostTime!=''">
+			  lostTime=#{lostTime},
+			</if>
+			<if test="lostSite!=null and lostSite!=''">
+			  lostSite=#{lostSite},
+			</if>
+			<if test="lostDescribe!=null and lostDescribe!=''">
+			  lostDescribe=#{lostDescribe},
+			</if>
+			<if test="lostJudge!=null and lostJudge!=''">
+			  lostJudge=#{lostJudge},
+			</if>
+		</set>
+		<where>
+			<if test="lostId!=null and lostId!=''">
+				lostId=#{lostId}
+			</if>
+		</where>
+	</update>	
+	
+	<select id="queryAllLost" parameterType="Integer" resultMap="lostType">
+		select * from lost where lostJudge=#{lostJudge}
+	</select>
+	
+	
+	<select id="queryLostById" parameterType="Integer" resultMap="lostType">
+		select * from lost where lostId=#{lostId}
+	</select>
+	<resultMap type="com.lost.javabean.pojo.Lost" id="lostType">
+		<id property="lostId" column="lostId"/>
+		<result property="lostHead" column="lostHead"/>
+		<result property="lostTime" column="lostTime"/>
+		<result property="lostSite" column="lostSite"/>
+		<result property="lostDescribe" column="lostDescribe"/>
+		<result property="lostJudge" column="lostJudge"/>
+		<collection property="lostTypeList" column="lostId" ofType="com.lost.javabean.pojo.Type" select="com.lost.dao.TypeDao.queryTypeByLostId">
+		</collection>
+	</resultMap>
+	
+	<select id="queryLost" parameterType="com.lost.javabean.pojo.Lost" resultType="com.lost.javabean.pojo.Lost">
+		select * from lost 
+		<where>
+			<if test="lostHead!=null and lostHead!=''">
+			  and lostHead=#{lostHead}
+			</if>
+			<if test="lostTime!=null and lostTime!=''">
+			  and lostTime=#{lostTime}
+			</if>
+			<if test="lostSite!=null and lostSite!=''">
+			  and lostSite=#{lostSite}
+			</if>
+			<if test="lostDescribe!=null and lostDescribe!=''">
+			  and lostDescribe=#{lostDescribe}
+			</if>
+			<if test="lostJudge!=null and lostJudge!=''">
+			  and lostJudge=#{lostJudge}
+			</if>
+		</where>
+	</select>
+
+</mapper>
+
+
